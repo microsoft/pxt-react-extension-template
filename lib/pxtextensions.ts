@@ -47,13 +47,13 @@ export namespace pxt.extensions {
                     client.emit('hidden', target);
                     break;
                 default:
-                    console.log("Unhandled event", msg);
+                    console.debug("Unhandled event", msg);
             }
-            console.log("received event: ", msg);
+            console.debug("received event: ", msg);
             return;
         }
         const action = idToType[msg.id];
-        console.log("received action: " + action, msg);
+        console.debug("received action: " + action, msg);
 
         switch (action) {
             case "extinit":
@@ -76,7 +76,7 @@ export namespace pxt.extensions {
     }
 
     export function init() {
-        console.log("initializing");
+        console.debug("initializing");
         if (!inIframe()) return;
 
         const msg = mkRequest('extinit');
@@ -84,12 +84,14 @@ export namespace pxt.extensions {
     }
 
     export function read(client?: PXTClient) {
-        console.log('requesting read code');
+        console.debug('requesting read code');
         if (!inIframe()) {
             // Read from local storage instead
             const resp = {
                 code: (window as any).localStorage['code'],
-                json: (window as any).localStorage['json']
+                json: (window as any).localStorage['json'],
+                jres: (window as any).localStorage['jres'],
+                asm: (window as any).localStorage['asm'],
             }
             if (client) client.emit('read', resp);
             return;
@@ -100,26 +102,30 @@ export namespace pxt.extensions {
     }
 
     export function readUser() {
-        console.log('requesting read user code');
+        console.debug('requesting read user code');
         if (!inIframe()) return;
 
         const msg = mkRequest('extusercode');
         window.parent.postMessage(msg, "*");
     }
 
-    export function write(code: string, json?: string) {
-        console.log('writing code:', code, json);
+    export function write(code: string, json?: string, jres?: string, asm?: string) {
+        console.debug('writing code:', code, json, jres, asm);
         if (!inIframe()) {
             // Write to local storage instead
             (window as any).localStorage['code'] = code;
             (window as any).localStorage['json'] = json;
+            (window as any).localStorage['jres'] = jres;
+            (window as any).localStorage['asm'] = asm;
             return;
         }
 
         const msg: any = mkRequest('extwritecode');
         msg.body = {
-            code: code,
-            json: json
+            code,
+            json,
+            jres,
+            asm
         }
         window.parent.postMessage(msg, "*");
     }
@@ -146,7 +152,7 @@ export namespace pxt.extensions {
 
         const msg: any = mkRequest('extdatastream');
         msg.body = {
-            serial: serial
+            serial
         }
         window.parent.postMessage(msg, "*");
     }
