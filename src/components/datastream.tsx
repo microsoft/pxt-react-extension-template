@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Segment, Button, FormField, Message } from "semantic-ui-react";
+import { Form, Segment, Button, FormField, Message, Label } from "semantic-ui-react";
 import { pxt, PXTClient } from "../../lib/pxtextensions";
 
 export interface DataStreamProps {
@@ -32,17 +32,18 @@ export class DataStream extends React.Component<DataStreamProps, DataStreamState
         const { streaming } = this.state;
         return <Form>
             <FormField>
-                Console data
+                <Label>Console data</Label>
+                <pre className="ui tiny">waiting for data</pre>
             </FormField>
-            <Segment>
+            <FormField>
                 <Button disabled={!hosted} onClick={this.handleStart}>
-                    {streaming ? "Stop" : "Start"}
+                    {streaming ? "Stop streaming" : "Start streaming"}
                 </Button>
                 {!hosted ? <Message info>
                     <Message.Header>Data streaming not available.</Message.Header>
                     This page needs to be opened from the MakeCode editor in order to get data streaming.
                 </Message> : undefined}
-            </Segment>
+            </FormField>
         </Form>;
     }
 }
