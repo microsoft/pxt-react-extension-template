@@ -47,6 +47,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
             this.setState({ shown: false });
         });
         this.props.client.on('shown', () => this.setState({ shown: true }));
+        this.props.client.on('written', () => this.setState({ dirty: false }));
     }
 
     private deserialize(resp: pxt.extensions.ReadResponse) {
@@ -64,7 +65,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
         // [extension_name].ts/json/jres/asm 
         const { code, json, jres, asm } = this.state;
         pxt.extensions.write(code, json, jres, asm);
-        this.setState({ dirty: false });
+        // written event unset the dirty flag
     }
 
     private handleSave() {
