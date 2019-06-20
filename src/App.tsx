@@ -1,9 +1,10 @@
 
 import * as React from 'react';
-import { Form, Container, Message, Segment, Button } from "semantic-ui-react";
+import { Form, Container, Segment, Button } from "semantic-ui-react";
 import { pxt, PXTClient } from '../lib/pxtextensions';
 import { CodePreview } from './components/codepreview';
 import { Footer } from './components/footer';
+import { Header } from './components/header';
 import * as util from "./lib/util";
 import * as images from "./lib/images";
 
@@ -71,11 +72,8 @@ export class App extends React.Component<AppProps, AppState> {
         return (
             <div className="App">
                 <Container>
+                    <Header />
                     <Form>
-                        <Message>
-                            <Message.Header>Extension title</Message.Header>
-                            <p>Explain what needs to happen</p>
-                        </Message>
                         {hosted ? <Segment>
                             <Button onClick={this.handleSave}>Save</Button>
                         </Segment> : undefined}

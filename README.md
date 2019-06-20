@@ -12,6 +12,7 @@ Follow these steps carefully to setup your extension for MakeCode.
 - [ ] search and replace all instance of "pxt-extension-name" with the repo name
 - [ ] search and replace all instance of "githubid" with the GitHub organization of the repo
 - [ ] update the ``pxt.json`` fields: ``name``, ``description``, extension ``namespace``
+- [ ] search for all ``TODO`` strings and update descriptions
 
 ### Build
 

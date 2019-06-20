@@ -1,6 +1,6 @@
 import * as React from "react";
-
 import { Segment, Button } from "semantic-ui-react";
+
 export interface CodePreviewProps {
     text: string;
 }

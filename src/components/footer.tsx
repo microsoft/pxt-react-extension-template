@@ -1,6 +1,6 @@
 import * as React from "react";
-
 import {  } from "semantic-ui-react";
+
 export interface FooterProps {
 }
 
