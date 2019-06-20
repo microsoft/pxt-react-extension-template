@@ -13,10 +13,10 @@ import { CodePreview } from './components/codepreview';
 export interface AppProps {
     client: PXTClient;
     target: string;
+    loaded: boolean;
 }
 
 export interface AppState {
-    loaded?: boolean;
     shown?: boolean;
 }
 
@@ -69,7 +69,7 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     render() {
-        const { loaded } = this.state;
+        const { loaded } = this.props;
 
         return (
             <div className="App">
