@@ -46,6 +46,9 @@ export namespace pxt.extensions {
                 case "exthidden":
                     client.emit('hidden', target);
                     break;
+                case "extdatastream":
+                    client.emit('datastream', true);
+                    break;
                 default:
                     console.debug("Unhandled event", msg);
             }
@@ -130,7 +133,7 @@ export namespace pxt.extensions {
         window.parent.postMessage(msg, "*");
 
         function writeStorage(key: string, value: string) {
-            if (value === undefined) 
+            if (value === undefined)
                 delete (window as any).localStorage[key];
             else
                 (window as any).localStorage[key] = value;
@@ -144,22 +147,22 @@ export namespace pxt.extensions {
         window.parent.postMessage(msg, "*");
     }
 
-    export function requestPermission(serial: boolean) {
+    export function requestPermission(console: boolean) {
         if (!inIframe()) return;
 
         const msg: any = mkRequest('extrequestpermission');
         msg.body = {
-            serial: serial
+            console
         }
         window.parent.postMessage(msg, "*");
     }
 
-    export function dataStream(serial: boolean) {
+    export function dataStream(console: boolean) {
         if (!inIframe()) return;
 
         const msg: any = mkRequest('extdatastream');
         msg.body = {
-            serial
+            console
         }
         window.parent.postMessage(msg, "*");
     }
