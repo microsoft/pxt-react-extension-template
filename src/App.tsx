@@ -1,9 +1,9 @@
 
 import * as React from 'react';
-import { Form, Container, Segment, Button } from "semantic-ui-react";
+import { Container, Segment, Button } from "semantic-ui-react";
 import { pxt, PXTClient } from '../lib/pxtextensions';
-import { CodePreview } from './components/codepreview';
 import { Footer } from './components/footer';
+import { Body } from './components/body';
 import { Header } from './components/header';
 import * as util from "./lib/util";
 import * as images from "./lib/images";
@@ -16,6 +16,11 @@ export interface AppProps {
 
 export interface AppState {
     shown?: boolean;
+
+    code?: string;
+    json?: string;
+    jres?: string;
+    asm?: string;
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -45,7 +50,7 @@ export class App extends React.Component<AppProps, AppState> {
         const jres = resp.jres !== undefined && util.JSONtryParse(resp.jres);
         const asm = resp.asm;
         console.debug('reading ', code, json, jres, asm);
-        // TODO handle
+        this.setState({ code, json, jres, asm });
     }
 
     private serialize() {
@@ -60,6 +65,7 @@ export class App extends React.Component<AppProps, AppState> {
         const jres: string = undefined;
         const asm: string = undefined;
         pxt.extensions.write(code, json, jres, asm);
+        this.setState({ code, json, jres, asm });
     }
 
     private handleSave() {
@@ -73,11 +79,10 @@ export class App extends React.Component<AppProps, AppState> {
             <div className="App">
                 <Container>
                     <Header />
-                    <Form>
-                        {hosted ? <Segment>
-                            <Button onClick={this.handleSave}>Save</Button>
-                        </Segment> : undefined}
-                    </Form>
+                    <Body {...this.state} />
+                    {hosted ? <Segment>
+                        <Button onClick={this.handleSave}>Save</Button>
+                    </Segment> : undefined}
                     <Footer />
                 </Container>
             </div>

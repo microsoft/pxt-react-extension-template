@@ -10,6 +10,13 @@ export interface AppState {
     hosted?: boolean;
 }
 
+export interface PXTComponentProps {
+    code?: string;
+    json?: string;
+    jres?: string;
+    asm?: string;
+}
+
 declare let window: any;
 
 export class PXTExtension extends React.Component<{}, AppState> {
