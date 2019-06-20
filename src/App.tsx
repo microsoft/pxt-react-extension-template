@@ -16,7 +16,6 @@ export interface AppProps {
 }
 
 export interface AppState {
-    target: string;
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -25,7 +24,6 @@ export class App extends React.Component<AppProps, AppState> {
         super(props);
 
         this.state = {
-            target: props.target
         }
 
         this.deserialize = this.deserialize.bind(this);
@@ -48,7 +46,7 @@ export class App extends React.Component<AppProps, AppState> {
     private serialize() {
         // PXT allows us to write to files in the project 
         // [extension_name].ts/json/jres/asm 
-        const { target } = this.state;
+        const { target } = this.props;
 
         // TODO: check that target is supported
 
