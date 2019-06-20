@@ -65,7 +65,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
         // [extension_name].ts/json/jres/asm 
         const { code, json, jres, asm } = this.state;
         pxt.extensions.write(code, json, jres, asm);
-        // written event unset the dirty flag
+        // 'written' event unset the dirty flag
     }
 
     private handleSave() {
