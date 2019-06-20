@@ -1,10 +1,18 @@
-# QR Code generator for MakeCode
+# A MakeCode Extension
 
-A simple tool to generate QR Code images for MakeCode
+This template contains the boiler plate code to create
+a MakeCode Extension that exposes a custom page in the editor.
+
+## Finishing the template
+
+* search and replace all instance of "pxt-extension-name" with the repo name
+* search and replace all instance of "githubid" with the GitHub organization of the repo
 
 ## Try it out
 
-https://pelikhan.github.io/pxt-qrcode-generator
+Once built, the extension will be hosted on GitHub pages.
+
+https://githubid.github.io/pxt-extension-name
 
 ## Build
 
@@ -43,7 +51,14 @@ npm run deploy
 ```
 
 ## Supported targets
+
+Update the list of targets supported by this extension.
+
+* for PXT/microbit
+* for PXT/adafruit
+* for PXT/maker
 * for PXT/arcade
+* for PXT/codal
 
 (The metadata above is needed for package search, update it with the targets you support)
 
