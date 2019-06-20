@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Form, FormField, Label, TextArea, TextAreaProps } from "semantic-ui-react";
 import { PXTComponentProps } from "../PXTExtension";
-import { App } from "../App";
+import { IApp } from "../App";
 
 export interface BodyProps extends PXTComponentProps {
-    parent: App;
+    parent: IApp;
 }
 
 export class Body extends React.Component<BodyProps> {
@@ -17,7 +17,7 @@ export class Body extends React.Component<BodyProps> {
 
     handleCodeChange(e: any, data: TextAreaProps) {
         const value = data.value.toString();
-        this.props.parent.setState({ code: value })
+        this.props.parent.setUserFiles({ code: value })
     }
 
     render(): JSX.Element {

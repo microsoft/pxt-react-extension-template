@@ -7,6 +7,11 @@ import { Body } from './components/body';
 import { Header } from './components/header';
 import * as util from "./lib/util";
 import * as images from "./lib/images";
+import { PXTComponentProps } from './PXTExtension';
+
+export interface IApp {
+    setUserFiles(props: PXTComponentProps): void;
+}
 
 export interface AppProps {
     client: PXTClient;
@@ -24,7 +29,7 @@ export interface AppState {
     asm?: string;
 }
 
-export class App extends React.Component<AppProps, AppState> {
+export class App extends React.Component<AppProps, AppState> implements IApp {
 
     constructor(props: AppProps) {
         super(props);
@@ -64,6 +69,17 @@ export class App extends React.Component<AppProps, AppState> {
 
     private handleSave() {
         this.serialize();
+    }
+
+    setUserFiles(props: PXTComponentProps) {
+        // check if state is different
+        const { code, json, jres, asm } = props;
+        if ((code !== undefined && code != this.state.code)
+            || (json !== undefined && json != this.state.json)
+            || (jres !== undefined && jres != this.state.jres)
+            || (asm !== undefined && asm != this.state.asm)) {
+            this.setState({ code, json, jres, asm, dirty: true });
+        }
     }
 
     render() {
