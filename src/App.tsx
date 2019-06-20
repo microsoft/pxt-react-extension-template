@@ -1,4 +1,3 @@
-/// <reference path="./localtypings/extension.d.ts" />
 
 import * as React from 'react';
 import * as QRCode from 'qrcode';
@@ -6,7 +5,6 @@ import * as QRCode from 'qrcode';
 import { Form, Container, Message, Segment, Input, InputOnChangeData } from "semantic-ui-react";
 
 import { pxt, PXTClient } from '../lib/pxtextensions';
-import { EmitterFactory } from "./exporter/factory";
 
 import * as util from "./lib/util";
 import * as images from "./lib/images";
@@ -38,23 +36,27 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     private deserialize(resp: pxt.extensions.ReadResponse) {
-        if (resp && resp.json && resp.json.length > 0) {
+        if (resp) {
             const code = resp.code;
-            const json = JSON.parse(resp.json);
-            console.log('reading code and json', code, json);
+            const json = resp.json !== undefined && JSON.parse(resp.json);
+            const jres = resp.jres !== undefined && JSON.parse(resp.jres);
+            const asm = resp.asm !== undefined && JSON.parse(resp.asm);
+            console.debug('reading ', code, json, jres, asm);
         }
     }
 
     private serialize() {
-        // PXT allows us to write to files in the project [extension_name].ts 
-        // and [extension_name].json
+        // PXT allows us to write to files in the project 
+        // [extension_name].ts/json/jres/asm 
         const { target } = this.state;
-        const emitter = EmitterFactory.getEmitter(target);
-        if (!emitter) return;
 
-        const code = emitter.output(undefined);
-        const json = {};
-        pxt.extensions.write(code, JSON.stringify(json));
+        // TODO: check that target is supported
+
+        const code = "TODO";
+        const json: string = undefined;
+        const jres: string = undefined;
+        const asm: string = undefined;
+        pxt.extensions.write(code, json, jres, asm);
     }
 
     render() {
