@@ -35,7 +35,7 @@ export class App extends React.Component<AppProps, AppState> {
             this.setState({ shown: false });
         });
         this.props.client.on('shown', () => this.setState({ shown: true }));
-}
+    }
 
     private deserialize(resp: pxt.extensions.ReadResponse) {
         if (!resp) return;
@@ -76,10 +76,9 @@ export class App extends React.Component<AppProps, AppState> {
                             <Message.Header>Extension title</Message.Header>
                             <p>Explain what needs to happen</p>
                         </Message>
-                        {hosted ?
-                            <Segment>
-                                <Button onClick={this.handleSave}>Save</Button>
-                            </Segment> : undefined}
+                        {hosted ? <Segment>
+                            <Button onClick={this.handleSave}>Save</Button>
+                        </Segment> : undefined}
                     </Form>
                     <Footer />
                 </Container>
