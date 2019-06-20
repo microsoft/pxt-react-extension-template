@@ -113,10 +113,10 @@ export namespace pxt.extensions {
         console.debug('writing code:', code, json, jres, asm);
         if (!inIframe()) {
             // Write to local storage instead
-            (window as any).localStorage['code'] = code;
-            (window as any).localStorage['json'] = json;
-            (window as any).localStorage['jres'] = jres;
-            (window as any).localStorage['asm'] = asm;
+            writeStorage('code', code);
+            writeStorage('json', json);
+            writeStorage('jres', jres);
+            writeStorage('asm', asm);
             return;
         }
 
@@ -128,6 +128,13 @@ export namespace pxt.extensions {
             asm
         }
         window.parent.postMessage(msg, "*");
+
+        function writeStorage(key: string, value: string) {
+            if (value === undefined) 
+                delete (window as any).localStorage[key];
+            else
+                (window as any).localStorage[key] = value;
+        }
     }
 
     export function queryPermission() {

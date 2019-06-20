@@ -68,6 +68,14 @@ export function setupDragAndDrop(r: HTMLElement, filter: (file: File) => boolean
     }, false);
 }
 
+export function JSONtryParse(src: string): any {
+    try {
+        return JSON.parse(src);
+    } catch (e) {
+        return undefined;
+    }
+}
+
 export function fileReadAsBufferAsync(f: File): Promise<Uint8Array> { // ArrayBuffer
     if (!f)
         return Promise.resolve<Uint8Array>(null);

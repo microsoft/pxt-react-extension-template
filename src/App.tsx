@@ -13,7 +13,7 @@ import { CodePreview } from './components/codepreview';
 export interface AppProps {
     client: PXTClient;
     target: string;
-    loaded: boolean;
+    hosted: boolean;
 }
 
 export interface AppState {
@@ -38,14 +38,14 @@ export class App extends React.Component<AppProps, AppState> {
             this.setState({ shown: false });
         });
         this.props.client.on('shown', () => this.setState({ shown: true }));
-    }
+}
 
     private deserialize(resp: pxt.extensions.ReadResponse) {
         if (!resp) return;
-        const code = resp.code;
-        const json = resp.json !== undefined && JSON.parse(resp.json);
-        const jres = resp.jres !== undefined && JSON.parse(resp.jres);
-        const asm = resp.asm !== undefined && JSON.parse(resp.asm);
+        const code = resp.code || " ";
+        const json = resp.json !== undefined && util.JSONtryParse(resp.json);
+        const jres = resp.jres !== undefined && util.JSONtryParse(resp.jres);
+        const asm = resp.asm;
         console.debug('reading ', code, json, jres, asm);
         // TODO handle
     }
@@ -69,7 +69,7 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     render() {
-        const { loaded } = this.props;
+        const { hosted } = this.props;
 
         return (
             <div className="App">
@@ -79,7 +79,7 @@ export class App extends React.Component<AppProps, AppState> {
                             <Message.Header>Extension title</Message.Header>
                             <p>Explain what needs to happen</p>
                         </Message>
-                        {loaded ?
+                        {hosted ?
                             <Segment>
                                 <Button onClick={this.handleSave}>Save</Button>
                             </Segment> : undefined}
