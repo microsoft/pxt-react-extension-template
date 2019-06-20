@@ -9,14 +9,14 @@ Follow these steps carefully to setup your extension for MakeCode.
 
 ### Updating info in the sources
 
-* search and replace all instance of "pxt-extension-name" with the repo name
-* search and replace all instance of "githubid" with the GitHub organization of the repo
+- [ ] search and replace all instance of "pxt-extension-name" with the repo name
+- [ ] search and replace all instance of "githubid" with the GitHub organization of the repo
+- [ ] update the ``pxt.json`` fields: ``name``, ``description``, extension ``namespace``
 
 ### Build
 
-First, install Node.
-
-To build the repo, run:
+- [ ] install Node.
+- [ ] To build the repo, run:
 
 ```
 npm install
@@ -24,11 +24,11 @@ npm install
 
 ### Launch the Development Server
 
-After this you can run
+- [ ] After this you can run the dev server
+
 ```
 npm run start
 ```
-to start the dev server.
 
 This will be running on http://localhost:3000
 
@@ -42,7 +42,7 @@ This repo uses [semantic-ui-react](https://github.com/Semantic-Org/Semantic-UI-R
 
 ### Deploy
 
-To deploy your extension to Github pages, run:
+- [ ] To deploy your extension to Github pages, run:
 
 ```
 npm run deploy
@@ -50,9 +50,14 @@ npm run deploy
 
 ### Try it out
 
-Once built, the extension will be hosted on GitHub pages.
+- [ ] Once built, the extension will be hosted on GitHub pages.
 
 https://githubid.github.io/pxt-extension-name
+
+- [ ] Go to the MakeCode editor and add this repo as an extension to a project, 
+you should see your button show up in the desired namespace.
+
+## Update the README
 
 
 ## Supported targets
