@@ -1,14 +1,11 @@
 
 import * as React from 'react';
-import * as QRCode from 'qrcode';
-
 import { Form, Container, Message, Segment, Button } from "semantic-ui-react";
-
 import { pxt, PXTClient } from '../lib/pxtextensions';
-
+import { CodePreview } from './components/codepreview';
+import { Footer } from './components/footer';
 import * as util from "./lib/util";
 import * as images from "./lib/images";
-import { CodePreview } from './components/codepreview';
 
 export interface AppProps {
     client: PXTClient;
@@ -84,6 +81,7 @@ export class App extends React.Component<AppProps, AppState> {
                                 <Button onClick={this.handleSave}>Save</Button>
                             </Segment> : undefined}
                     </Form>
+                    <Footer />
                 </Container>
             </div>
         );
