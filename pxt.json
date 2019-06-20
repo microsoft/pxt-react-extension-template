@@ -1,0 +1,21 @@
+{
+    "name": "qrcode-generator",
+    "version": "0.0.1",
+    "description": "A QR code generator for MakeCode",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "extension": {
+        "namespace": "images",
+        "label": "QR Code",
+        "localUrl": "http://127.0.0.1:3000/index.html"
+    }
+}
