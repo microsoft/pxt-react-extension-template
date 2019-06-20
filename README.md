@@ -3,18 +3,16 @@
 This template contains the boiler plate code to create
 a MakeCode Extension that exposes a custom page in the editor.
 
-## Finishing the template
+## Creating the extension
+
+Follow these steps carefully to setup your extension for MakeCode.
+
+### Updating info in the sources
 
 * search and replace all instance of "pxt-extension-name" with the repo name
 * search and replace all instance of "githubid" with the GitHub organization of the repo
 
-## Try it out
-
-Once built, the extension will be hosted on GitHub pages.
-
-https://githubid.github.io/pxt-extension-name
-
-## Build
+### Build
 
 First, install Node.
 
@@ -24,7 +22,7 @@ To build the repo, run:
 npm install
 ```
 
-## Development
+### Launch the Development Server
 
 After this you can run
 ```
@@ -42,13 +40,20 @@ Webpack will generate the bundled app js when running ``npm run start`` or ``npm
 
 This repo uses [semantic-ui-react](https://github.com/Semantic-Org/Semantic-UI-React) as the UI framework, but you can substitue it with any
 
-## Deploy
+### Deploy
 
 To deploy your extension to Github pages, run:
 
 ```
 npm run deploy
 ```
+
+### Try it out
+
+Once built, the extension will be hosted on GitHub pages.
+
+https://githubid.github.io/pxt-extension-name
+
 
 ## Supported targets
 
