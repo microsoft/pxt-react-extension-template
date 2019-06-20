@@ -28,18 +28,6 @@ export class Body extends React.Component<BodyProps> {
                 <Label>code</Label>
                 <TextArea value={code} onChange={this.handleCodeChange} />
             </FormField>
-            <FormField>
-                <Label>json</Label>
-                <TextArea value={json} />
-            </FormField>
-            <FormField>
-                <Label>jres</Label>
-                <TextArea value={jres} />
-            </FormField>
-            <FormField>
-                <Label>asm</Label>
-                <TextArea value={asm} />
-            </FormField>
         </Form>
     }
 }
