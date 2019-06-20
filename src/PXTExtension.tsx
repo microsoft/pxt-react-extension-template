@@ -23,8 +23,6 @@ export class PXTExtension extends React.Component<{}, AppState> {
 
     private client: PXTClient;
 
-    private static DEFAULT_TARGET = 'microbit';
-
     constructor(props: {}) {
         super(props);
 
@@ -34,7 +32,7 @@ export class PXTExtension extends React.Component<{}, AppState> {
         }
 
         this.client = new PXTClient();
-        this.client.on('init', () => this.setState({ hosted: true }));
+        this.client.on('init', (target: string) => this.setState({ target, hosted: true }));
         pxt.extensions.setup(this.client);
         pxt.extensions.init();
     }
@@ -49,7 +47,7 @@ export class PXTExtension extends React.Component<{}, AppState> {
             const url = new URL(window.location.href);
             let chosen = url.searchParams.get("target");
             if (chosen) return chosen.toLowerCase();
-            return PXTExtension.DEFAULT_TARGET
+            return chosen;
         }
         return undefined;
     }
