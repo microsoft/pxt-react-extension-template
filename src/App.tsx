@@ -15,6 +15,7 @@ export interface AppProps {
 }
 
 export interface AppState {
+    dirty?: boolean;
     shown?: boolean;
 
     code?: string;
@@ -50,22 +51,15 @@ export class App extends React.Component<AppProps, AppState> {
         const jres = resp.jres !== undefined && util.JSONtryParse(resp.jres);
         const asm = resp.asm;
         console.debug('reading ', code, json, jres, asm);
-        this.setState({ code, json, jres, asm });
+        this.setState({ code, json, jres, asm, dirty: false });
     }
 
     private serialize() {
         // PXT allows us to write to files in the project 
         // [extension_name].ts/json/jres/asm 
-        const { target } = this.props;
-
-        // TODO: check that target is supported
-
-        const code = "TODO";
-        const json: string = undefined;
-        const jres: string = undefined;
-        const asm: string = undefined;
+        const { code, json, jres, asm } = this.state;
         pxt.extensions.write(code, json, jres, asm);
-        this.setState({ code, json, jres, asm });
+        this.setState({ dirty: false });
     }
 
     private handleSave() {
@@ -78,12 +72,12 @@ export class App extends React.Component<AppProps, AppState> {
         return (
             <div className="App">
                 <Container>
-                    <Header />
-                    <Body {...this.state} />
+                    <Header {...this.state} />
+                    <Body parent={this} {...this.state} />
                     {hosted ? <Segment>
                         <Button onClick={this.handleSave}>Save</Button>
                     </Segment> : undefined}
-                    <Footer />
+                    <Footer {...this.state} />
                 </Container>
             </div>
         );
