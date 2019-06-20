@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as QRCode from 'qrcode';
 
-import { Form, Container, Message, Segment, Input, InputOnChangeData } from "semantic-ui-react";
+import { Form, Container, Message, Segment, Button } from "semantic-ui-react";
 
 import { pxt, PXTClient } from '../lib/pxtextensions';
 
@@ -16,6 +16,8 @@ export interface AppProps {
 }
 
 export interface AppState {
+    loaded?: boolean;
+    shown?: boolean;
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -28,19 +30,24 @@ export class App extends React.Component<AppProps, AppState> {
 
         this.deserialize = this.deserialize.bind(this);
         this.serialize = this.serialize.bind(this);
+        this.handleSave = this.handleSave.bind(this);
 
-        props.client.on('read', this.deserialize);
-        props.client.on('hidden', this.serialize);
+        this.props.client.on('read', this.deserialize);
+        this.props.client.on('hidden', () => {
+            this.serialize();
+            this.setState({ shown: false });
+        });
+        this.props.client.on('shown', () => this.setState({ shown: true }));
     }
 
     private deserialize(resp: pxt.extensions.ReadResponse) {
-        if (resp) {
-            const code = resp.code;
-            const json = resp.json !== undefined && JSON.parse(resp.json);
-            const jres = resp.jres !== undefined && JSON.parse(resp.jres);
-            const asm = resp.asm !== undefined && JSON.parse(resp.asm);
-            console.debug('reading ', code, json, jres, asm);
-        }
+        if (!resp) return;
+        const code = resp.code;
+        const json = resp.json !== undefined && JSON.parse(resp.json);
+        const jres = resp.jres !== undefined && JSON.parse(resp.jres);
+        const asm = resp.asm !== undefined && JSON.parse(resp.asm);
+        console.debug('reading ', code, json, jres, asm);
+        // TODO handle
     }
 
     private serialize() {
@@ -57,7 +64,13 @@ export class App extends React.Component<AppProps, AppState> {
         pxt.extensions.write(code, json, jres, asm);
     }
 
+    private handleSave() {
+        this.serialize();
+    }
+
     render() {
+        const { loaded } = this.state;
+
         return (
             <div className="App">
                 <Container>
@@ -66,6 +79,10 @@ export class App extends React.Component<AppProps, AppState> {
                             <Message.Header>Extension title</Message.Header>
                             <p>Explain what needs to happen</p>
                         </Message>
+                        {loaded ?
+                            <Segment>
+                                <Button onClick={this.handleSave}>Save</Button>
+                            </Segment> : undefined}
                     </Form>
                 </Container>
             </div>

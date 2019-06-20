@@ -6,6 +6,7 @@ import { pxt, PXTClient } from "../lib/pxtextensions";
 
 export interface AppState {
     target?: string;
+    loaded?: boolean;
     isSupported?: boolean;
 }
 
@@ -47,7 +48,7 @@ export class PXTExtension extends React.Component<{}, AppState> {
 
     componentDidMount() {
         this.client.on('loaded', (target: string) => {
-            this.setState({ target });
+            this.setState({ target, loaded: true });
             pxt.extensions.read(this.client);
         })
 
@@ -58,17 +59,18 @@ export class PXTExtension extends React.Component<{}, AppState> {
 
         if (!pxt.extensions.inIframe()) {
             this.client.emit('loaded', this.getDefaultTarget());
+            this.client.emit('shown', undefined);
         }
     }
 
     render() {
-        const { target, isSupported } = this.state;
+        const { target, isSupported, loaded } = this.state;
 
         return (
             <div className={`PXTExtension ${!target ? 'dimmable dimmed' : ''}`}>
                 {!isSupported ? <div>
                     This extension is not supported in your browser
-                </div> : <App client={this.client} target={target} />}
+                </div> : <App client={this.client} target={target} loaded={loaded} />}
             </div>
         );
     }
