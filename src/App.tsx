@@ -41,7 +41,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
 
         this.deserialize = this.deserialize.bind(this);
         this.serialize = this.serialize.bind(this);
-        this.handleSave = this.handleSave.bind(this);
+        this.handleExport = this.handleExport.bind(this);
 
         this.props.client.on('read', this.deserialize);
         this.props.client.on('hidden', () => {
@@ -65,13 +65,15 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
     private serialize() {
         // PXT allows us to write to files in the project 
         // [extension_name].ts/json/jres/asm 
-        const { code, json, jres, asm } = this.state;
-        pxt.extensions.write(code, json, jres, asm);
+        const { code, json, jres, asm, dirty } = this.state;
+        if (!dirty) return;
+
+        pxt.extensions.write(this.props.client, code, json, jres, asm);
         // 'written' event unset the dirty flag
     }
 
-    private handleSave() {
-        this.serialize();
+    private handleExport() {
+        // TODO file save
     }
 
     setUserFiles(props: PXTComponentProps) {
@@ -82,6 +84,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
             || (jres !== undefined && jres != this.state.jres)
             || (asm !== undefined && asm != this.state.asm)) {
             this.setState({ code, json, jres, asm, dirty: true });
+            util.debounce(this.serialize, 2000);
         }
     }
 
@@ -92,11 +95,17 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
             <div className="App">
                 <Container>
                     <Header {...this.state} />
-                    <Body parent={this} {...this.state} />
-                    <DataStream {...this.props} />
-                    <Snippet {...this.state} />
-                    {hosted ? <Segment>
-                        <Button onClick={this.handleSave}>Save</Button>
+                    <Segment basic>
+                        <Body parent={this} {...this.state} />
+                    </Segment>
+                    <Segment basic>
+                        <DataStream {...this.props} />
+                    </Segment>
+                    <Segment basic>
+                        <Snippet {...this.state} />
+                    </Segment>
+                    {!hosted ? <Segment basic>
+                        <Button onClick={this.handleExport}>Export</Button>
                     </Segment> : undefined}
                     <Footer {...this.state} />
                 </Container>

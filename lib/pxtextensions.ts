@@ -72,8 +72,7 @@ export namespace pxt.extensions {
                 client.emit('read', msg.resp);
                 break;
             case "extwritecode":
-                // Loaded, set the target
-                client.emit('written', msg.resp);
+                client.emit('written', undefined);
                 break;
         }
     }
@@ -112,7 +111,7 @@ export namespace pxt.extensions {
         window.parent.postMessage(msg, "*");
     }
 
-    export function write(code: string, json?: string, jres?: string, asm?: string) {
+    export function write(client: PXTClient, code: string, json?: string, jres?: string, asm?: string) {
         console.debug('writing code:', code, json, jres, asm);
         if (!inIframe()) {
             // Write to local storage instead
@@ -120,6 +119,7 @@ export namespace pxt.extensions {
             writeStorage('json', json);
             writeStorage('jres', jres);
             writeStorage('asm', asm);
+            client.emit('written', undefined);
             return;
         }
 
