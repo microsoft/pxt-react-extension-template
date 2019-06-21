@@ -5,7 +5,7 @@
  */
 import * as React from "react";
 
-// renderer
+// update url with target editor
 export let makecodeUrl: string = "https://makecode.microbit.org/";
 export let lang: string = "en";
 
@@ -44,7 +44,6 @@ const pendingRequests: {
 
 function renderBlocks(req: RenderBlocksRequestMessage, cb: (resp: RenderBlocksResponseMessage) => void) {
     req.id = (nextRequest++) + "";
-    console.log('render ' + req.id)
     pendingRequests[req.id] = { req, cb }
     if (ready)
         sendRequest(req);
@@ -61,7 +60,6 @@ function handleMessage(ev: MessageEvent) {
     let msg = ev.data;
     if (msg.source != "makecode") return;
 
-    console.log(msg.type)
     switch (msg.type) {
         case "renderready":
             ready = true;
