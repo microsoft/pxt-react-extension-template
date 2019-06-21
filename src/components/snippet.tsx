@@ -132,6 +132,7 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
 
         };
         this.renderProps = this.renderProps.bind(this);
+        // rendering can be costly
         this.debouncedRenderProps = Snippet.debounce(this.renderProps, 500);
     }
 
@@ -198,9 +199,15 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
         const { code } = this.props;
         const { uri, width, height, rendering, error } = this.state;
 
+        // waiting for the iframe to start?
         const loading = !rendererReady;
+        // is there any error?
         const err = error || rendererError;
-        const precode = loading || !rendererReady || err || !uri ? code : undefined;
+        // display code if blocks rendering failed
+        const precode = loading
+            || !rendererReady
+            || err
+            || !uri ? code : undefined;
 
         return <div>
             {loading || rendering ? <div className="ui active inverted dimmer">
