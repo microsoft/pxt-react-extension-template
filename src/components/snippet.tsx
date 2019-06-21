@@ -1,4 +1,8 @@
 
+/**
+ * A React component 
+ * to render MakeCode block snippets
+ */
 import * as React from "react";
 
 // renderer
@@ -96,15 +100,18 @@ function startRenderer(): HTMLIFrameElement {
 }
 
 export interface SnippetProps {
+    // the type of snippets, default is "blocks"
     type?: string;
+    // MakeCode TypeScript code to render
     code?: string;
 }
 
 export interface SnippetState {
+    rendering?: boolean;
+
     uri?: string;
     width?: number;
     height?: number;
-    rendering?: boolean;
 }
 
 export class Snippet extends React.Component<SnippetProps, SnippetState> {
