@@ -8,7 +8,7 @@ import * as React from "react";
 // update url with target editor
 export let makecodeUrl: string = "https://makecode.microbit.org/";
 // force language if needed
-export let lang: string = undefined; 
+export let lang: string = undefined;
 
 interface RenderBlocksRequestMessage {
     type: "renderblocks",
@@ -100,10 +100,11 @@ function startRenderer(): HTMLIFrameElement {
 }
 
 export interface SnippetProps {
-    // the type of snippets, default is "blocks"
-    type?: string;
     // MakeCode TypeScript code to render
     code?: string;
+    packageId?: string;
+    package?: string;
+    snippetMode?: boolean;
 }
 
 export interface SnippetState {
@@ -116,36 +117,62 @@ export interface SnippetState {
 }
 
 export class Snippet extends React.Component<SnippetProps, SnippetState> {
+    private debouncedRenderProps: (...args: any[]) => any;
 
     constructor(props: SnippetProps) {
         super(props);
         this.state = {
 
         };
+        this.renderProps = this.renderProps.bind(this);
+        this.debouncedRenderProps = Snippet.debounce(this.renderProps, 500);
+    }
+
+    private static debounce(func: (...args: any[]) => any, wait: number): (...args: any[]) => any {
+        let timeout: any;
+        return function (this: any) {
+            let context = this
+            let args = arguments;
+            let later = function () {
+                timeout = null;
+            };
+            let callNow = !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
     }
 
     componentDidMount() {
         startRenderer();
-        this.renderProps(this.props);
+        this.debouncedRenderProps();
     }
 
     componentWillReceiveProps(nextProps: SnippetProps) {
-        if (this.props.type != nextProps.type ||
-            this.props.code != nextProps.code) {
-            this.renderProps(nextProps);
+        if (this.props.code != nextProps.code ||
+            this.props.packageId != this.props.packageId ||
+            this.props.package != this.props.package ||
+            this.props.snippetMode != this.props.snippetMode) {
+            this.debouncedRenderProps();
         }
     }
 
-    private renderProps(nextProps: SnippetProps) {
+    private renderProps() {
         // clear state and render again
+        const { code, packageId, package: _package, snippetMode } = this.props;
         this.setState({ uri: undefined, width: undefined, height: undefined, error: undefined, rendering: false });
-        if (nextProps.code) {
+        if (code) {
             this.setState({ rendering: true })
             renderBlocks(
                 {
                     type: "renderblocks",
                     id: "",
-                    code: nextProps.code
+                    code,
+                    options: {
+                        packageId,
+                        package: _package,
+                        snippetMode
+                    }
                 },
                 (resp) => {
                     this.setState({

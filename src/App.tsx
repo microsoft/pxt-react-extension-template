@@ -32,6 +32,7 @@ export interface AppState {
 }
 
 export class App extends React.Component<AppProps, AppState> implements IApp {
+    private debounceSerialized: any;
 
     constructor(props: AppProps) {
         super(props);
@@ -41,6 +42,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
 
         this.deserialize = this.deserialize.bind(this);
         this.serialize = this.serialize.bind(this);
+        this.debounceSerialized = util.debounce(this.serialize, 500);
         this.handleExport = this.handleExport.bind(this);
 
         this.props.client.on('read', this.deserialize);
@@ -83,8 +85,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
             || (json !== undefined && json != this.state.json)
             || (jres !== undefined && jres != this.state.jres)
             || (asm !== undefined && asm != this.state.asm)) {
-            this.setState({ code, json, jres, asm, dirty: true });
-            util.debounce(this.serialize, 2000);
+            this.setState({ code, json, jres, asm, dirty: true }, this.debounceSerialized);
         }
     }
 
