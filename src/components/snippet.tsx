@@ -10,6 +10,8 @@ export let makecodeUrl: string = "https://makecode.microbit.org/";
 // force language if needed
 export let lang: string = undefined;
 
+const RENDER_DEBOUNCE_TIMEOUT = 1000;
+
 interface RenderBlocksRequestMessage {
     type: "renderblocks",
     id: string;
@@ -132,8 +134,7 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
 
         };
         this.renderProps = this.renderProps.bind(this);
-        // rendering can be costly
-        this.debouncedRenderProps = Snippet.debounce(this.renderProps, 500);
+        this.debouncedRenderProps = Snippet.debounce(this.renderProps, RENDER_DEBOUNCE_TIMEOUT);
     }
 
     private static debounce(func: (...args: any[]) => any, wait: number): (...args: any[]) => any {
@@ -143,6 +144,7 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
             let args = arguments;
             let later = function () {
                 timeout = null;
+                func.apply(context, args);
             };
             let callNow = !timeout;
             clearTimeout(timeout);
@@ -158,9 +160,9 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
 
     componentWillReceiveProps(nextProps: SnippetProps) {
         if (this.props.code != nextProps.code ||
-            this.props.packageId != this.props.packageId ||
-            this.props.package != this.props.package ||
-            this.props.snippetMode != this.props.snippetMode) {
+            this.props.packageId != nextProps.packageId ||
+            this.props.package != nextProps.package ||
+            this.props.snippetMode != nextProps.snippetMode) {
             this.debouncedRenderProps();
         }
     }
@@ -170,7 +172,7 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
         const { code, packageId, package: _package, snippetMode } = this.props;
         this.setState({ uri: undefined, width: undefined, height: undefined, error: undefined, rendering: false });
         if (code) {
-            this.setState({ rendering: true })
+            this.setState({ rendering: true });
             renderBlocks(
                 {
                     type: "renderblocks",
