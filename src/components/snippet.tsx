@@ -199,12 +199,17 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
         const { uri, width, height, rendering, error } = this.state;
 
         const loading = !rendererReady;
-        const precode = loading || !rendererReady || rendererError || !uri ? code : undefined;
+        const err = error || rendererError;
+        const precode = loading || !rendererReady || err || !uri ? code : undefined;
 
-        return <div className={loading ? "loading" : undefined}>
-            {loading ? <div className="ui loading">loading...</div> : undefined}
-            {precode ? <pre><code>{precode}</code></pre> : undefined}
-            {rendererError ? <div className="ui message info">{rendererError}</div> : undefined}
+        return <div>
+            {loading || rendering ? <div className="ui active inverted dimmer">
+                <div className="ui loader"></div>
+            </div> : undefined}
+            {precode ? <pre>
+                <code>{precode}</code>
+            </pre> : undefined}
+            {err ? <div className="ui message info">{err}</div> : undefined}
             {uri ? <img className="ui image" alt={code} src={uri} width={width} height={height} /> : undefined}
         </div>
     }
