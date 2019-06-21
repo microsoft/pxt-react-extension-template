@@ -98,7 +98,7 @@ function startRenderer(): HTMLIFrameElement {
     f.src = `${makecodeUrl}--docs?render=1${lang ? `&lang=${lang}` : ''}`;
     document.body.appendChild(f);
     // check if connection failed
-    setTimeout(function() {
+    setTimeout(function () {
         if (!rendererReady)
             rendererError = "Oops, can't connect to MakeCode. Please check your internet connection."
     }, 30000);
@@ -198,13 +198,14 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
         const { code } = this.props;
         const { uri, width, height, rendering, error } = this.state;
 
-        if (!rendererReady)
-            return <div>{rendererError || "starting renderer..."}</div>
-        else if (rendering)
-            return <div>rendering...</div>;
-        else if (!uri)
-            return <div>unable to render code ({error})</div>;
-        else
-            return <img alt={code} src={uri} width={width} height={height} />
+        const loading = !rendererReady;
+        const precode = loading || !rendererReady || rendererError || !uri ? code : undefined;
+
+        return <div className={loading ? "loading" : undefined}>
+            {loading ? <div className="ui loading">loading...</div> : undefined}
+            {precode ? <pre><code>{precode}</code></pre> : undefined}
+            {rendererError ? <div className="ui message info">{rendererError}</div> : undefined}
+            {uri ? <img className="ui image" alt={code} src={uri} width={width} height={height} /> : undefined}
+        </div>
     }
 }
