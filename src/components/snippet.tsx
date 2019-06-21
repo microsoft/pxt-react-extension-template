@@ -7,7 +7,8 @@ import * as React from "react";
 
 // update url with target editor
 export let makecodeUrl: string = "https://makecode.microbit.org/";
-export let lang: string = "en";
+// force language if needed
+export let lang: string = undefined; 
 
 interface RenderBlocksRequestMessage {
     type: "renderblocks",
@@ -91,7 +92,7 @@ function startRenderer(): HTMLIFrameElement {
     f.style.bottom = "0";
     f.style.width = "1px";
     f.style.height = "1px";
-    f.src = `${makecodeUrl}--docs?render=1&lang=${lang}`;
+    f.src = `${makecodeUrl}--docs?render=1${lang ? `&lang=${lang}` : ''}`;
     document.body.appendChild(f);
 
     return f;
