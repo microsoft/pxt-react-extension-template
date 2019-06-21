@@ -75,7 +75,15 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
     }
 
     private handleExport() {
-        // TODO file save
+        const { code, json, jres, asm } = this.state;
+        if (code)
+            util.browserDownloadText(code, "extension.ts");
+        if (json)
+            util.browserDownloadText(json, "extension.json");
+        if (jres)
+            util.browserDownloadText(jres, "extension.jres");
+        if (asm)
+            util.browserDownloadText(asm, "extension.asm");
     }
 
     setUserFiles(props: PXTComponentProps) {
