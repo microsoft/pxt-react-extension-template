@@ -38,7 +38,8 @@ interface RenderBlocksRequentResponse {
     cb: (resp: RenderBlocksResponseMessage) => void
 }
 
-let ready = false;
+let rendererReady = false;
+let rendererError: string = "";
 let nextRequest = 0;
 const pendingRequests: {
     [index: string]: RenderBlocksRequentResponse
@@ -47,7 +48,7 @@ const pendingRequests: {
 function renderBlocks(req: RenderBlocksRequestMessage, cb: (resp: RenderBlocksResponseMessage) => void) {
     req.id = (nextRequest++) + "";
     pendingRequests[req.id] = { req, cb }
-    if (ready)
+    if (rendererReady)
         sendRequest(req);
 }
 
@@ -64,7 +65,8 @@ function handleMessage(ev: MessageEvent) {
 
     switch (msg.type) {
         case "renderready":
-            ready = true;
+            rendererReady = true;
+            rendererError = undefined;
             Object.keys(pendingRequests).forEach(k => sendRequest(pendingRequests[k].req));
             break;
         case "renderblocks":
@@ -95,6 +97,11 @@ function startRenderer(): HTMLIFrameElement {
     f.style.height = "1px";
     f.src = `${makecodeUrl}--docs?render=1${lang ? `&lang=${lang}` : ''}`;
     document.body.appendChild(f);
+    // check if connection failed
+    setTimeout(function() {
+        if (!rendererReady)
+            rendererError = "Oops, can't connect to MakeCode. Please check your internet connection."
+    }, 30000);
 
     return f;
 }
@@ -191,8 +198,8 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
         const { code } = this.props;
         const { uri, width, height, rendering, error } = this.state;
 
-        if (!ready)
-            return <div>starting renderer...</div>
+        if (!rendererReady)
+            return <div>{rendererError || "starting renderer..."}</div>
         else if (rendering)
             return <div>rendering...</div>;
         else if (!uri)
