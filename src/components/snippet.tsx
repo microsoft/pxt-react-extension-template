@@ -30,6 +30,7 @@ interface RenderBlocksResponseMessage {
     svg?: string;
     width?: number;
     height?: number;
+    error?: string;
 }
 
 interface RenderBlocksRequentResponse {
@@ -111,6 +112,7 @@ export interface SnippetState {
     uri?: string;
     width?: number;
     height?: number;
+    error?: string;
 }
 
 export class Snippet extends React.Component<SnippetProps, SnippetState> {
@@ -136,7 +138,7 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
 
     private renderProps(nextProps: SnippetProps) {
         // clear state and render again
-        this.setState({ uri: undefined, width: undefined, height: undefined, rendering: false });
+        this.setState({ uri: undefined, width: undefined, height: undefined, error: undefined, rendering: false });
         if (nextProps.code) {
             this.setState({ rendering: true })
             renderBlocks(
@@ -150,6 +152,7 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
                         uri: resp.uri,
                         width: resp.width,
                         height: resp.height,
+                        error: resp.error,
                         rendering: false
                     });
                 }
@@ -159,14 +162,14 @@ export class Snippet extends React.Component<SnippetProps, SnippetState> {
 
     render(): JSX.Element {
         const { code } = this.props;
-        const { uri, width, height, rendering } = this.state;
+        const { uri, width, height, rendering, error } = this.state;
 
         if (!ready)
             return <div>starting renderer...</div>
         else if (rendering)
             return <div>rendering...</div>;
         else if (!uri)
-            return <div>unable to render code</div>;
+            return <div>unable to render code ({error})</div>;
         else
             return <img alt={code} src={uri} width={width} height={height} />
     }

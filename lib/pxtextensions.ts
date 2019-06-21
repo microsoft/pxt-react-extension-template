@@ -125,15 +125,15 @@ export namespace pxt.extensions {
 
         const msg: any = mkRequest('extwritecode');
         msg.body = {
-            code,
-            json,
-            jres,
-            asm
+            code: code || undefined,
+            json: json || undefined,
+            jres: jres || undefined,
+            asm: asm || undefined
         }
         window.parent.postMessage(msg, "*");
 
         function writeStorage(key: string, value: string) {
-            if (value === undefined)
+            if (!value)
                 delete (window as any).localStorage[key];
             else
                 (window as any).localStorage[key] = value;
