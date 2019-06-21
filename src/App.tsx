@@ -9,6 +9,7 @@ import * as util from "./lib/util";
 import * as images from "./lib/images";
 import { PXTComponentProps } from './PXTExtension';
 import { DataStream } from './components/datastream';
+import { Snippet } from './components/snippet';
 
 export interface IApp {
     setUserFiles(props: PXTComponentProps): void;
@@ -93,6 +94,7 @@ export class App extends React.Component<AppProps, AppState> implements IApp {
                     <Header {...this.state} />
                     <Body parent={this} {...this.state} />
                     <DataStream {...this.props} />
+                    <Snippet {...this.state} />
                     {hosted ? <Segment>
                         <Button onClick={this.handleSave}>Save</Button>
                     </Segment> : undefined}
