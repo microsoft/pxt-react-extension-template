@@ -1,3 +1,5 @@
+THIS KIND OF EXTENSION WILL NOT BE SUPPORTED IN FUTURE VERSIONS OF MAKECODE.
+
 # A MakeCode Extension
 
 This template contains the boiler plate code to create
